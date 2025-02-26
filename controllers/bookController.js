@@ -1,8 +1,8 @@
-const connection = require("../data/db_books");
+const connection = require("../data/db_movies");
 
 // INDEX
 const index = (req, res) => {
-  const sql = `SELECT * FROM books`;
+  const sql = `SELECT * FROM movies`;
 
   connection.execute(sql, (err, results) => {
     if (err) {
@@ -19,19 +19,19 @@ const show = (req, res) => {
   const { id } = req.params;
 
   //   Book
-  const bookSql = `SELECT * FROM books WHERE id = ?`;
+  const movieSql = `SELECT * FROM movies WHERE id = ?`;
 
-  connection.execute(bookSql, [id], (err, results) => {
+  connection.execute(movieSql, [id], (err, results) => {
     if (err) {
       return res.status(500).json({
         error: "Query Error",
-        message: `Database query failed: ${bookSql}`,
+        message: `Database query failed: ${movieSql}`,
       });
     }
 
-    const book = results[0];
+    const movie = results[0];
 
-    if (!book) {
+    if (!movie) {
       return res.status(404).json({
         error: "Not found",
         message: "Libro non trovato",
@@ -39,7 +39,7 @@ const show = (req, res) => {
     }
 
     // Reviews
-    const reviewsSql = `SELECT * FROM reviews WHERE book_id = ?`;
+    const reviewsSql = `SELECT * FROM reviews WHERE movie_id = ?`;
 
     connection.execute(reviewsSql, [id], (err, results) => {
       if (err) {
@@ -48,8 +48,8 @@ const show = (req, res) => {
           message: `Database query failed: ${reviewsSql}`,
         });
       }
-      book.reviews = results;
-      res.json(book);
+      movie.reviews = results;
+      res.json(movie);
     });
   });
 };
