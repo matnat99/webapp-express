@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const booksRouter = require("./routers/booksRouter");
+const moviesRouter = require("./routers/moviesRouter");
 const notFound = require("./middlewares/notFound");
 const errorsHandler = require("./middlewares/errorsHandler");
 
@@ -19,7 +19,7 @@ app.use(express.static("public")); //File statici
 app.use(express.json()); //Parsing della req.body
 
 // Routes
-app.use("/books", booksRouter);
+app.use("/movies", moviesRouter);
 
 // MIddelwares gestione errori
 app.use(notFound);
