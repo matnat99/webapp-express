@@ -30,7 +30,13 @@ const show = (req, res) => {
   const { id } = req.params;
 
   // Movie
-  const movieSql = `SELECT * FROM movies WHERE id = ?`;
+  const movieSql = `
+  SELECT movies.*, ROUND(AVG(reviews.vote)) AS avg_vote
+  FROM movies
+  LEFT JOIN reviews ON movies.id = reviews.movie_id
+  WHERE movies.id = ?
+  GROUP BY movies.id;
+  `;
 
   connection.execute(movieSql, [id], (err, results) => {
     if (err) {
