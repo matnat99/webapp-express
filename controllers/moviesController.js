@@ -95,4 +95,32 @@ const storeReview = (req, res) => {
   });
 };
 
-module.exports = { index, show, storeReview };
+// STORE
+const store = (req, res) => {
+  // Recuperare il nome del file caricato
+  const image = req.file.filename;
+
+  // Recuperare i dati dal body della richiesta
+  const { title, director, genre, release_year, abstract } = req.body;
+
+  // Preparare la query di inserimento
+  const sql = `INSERT INTO movies (image, title, director, genre, release_year, abstract) VALUES (?, ?, ?, ?, ?, ?)`;
+
+  // Eseguire la query
+  connection.execute(
+    sql,
+    [image, title, director, genre, release_year, abstract],
+    (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          error: "Query Error",
+          message: `Database query failed: ${sql}`,
+        });
+      }
+      // Rispondere al client
+      res.status(201).json({ id: results.insertId });
+    }
+  );
+};
+
+module.exports = { index, show, store, storeReview };
